@@ -16,6 +16,8 @@ fi
 
 editions='analogonecore
 andromeda
+cloud
+cloudn
 cloude
 clouden
 core
