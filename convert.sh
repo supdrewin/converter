@@ -269,7 +269,7 @@ if [ "$1" == "-?" -o "$1" == "--help" -o "$1" == "-h" ]; then
   echo "1 - create virtual edtitions"
   echo ""
   if [ `uname` == "Linux" ]; then
-  echo -e "${infoColor}convert_config_linux file${resetColor}"
+    echo -e "${infoColor}convert_config_linux file${resetColor}"
   elif [ `uname` == "Darwin" ]; then
     echo -e "${infoColor}convert_config_macos file${resetColor}"
   fi
@@ -297,14 +297,14 @@ if ! which cabextract >/dev/null 2>&1 \
   echo " - cabextract"
   echo " - wimlib-imagex"
   echo " - chntpw"
-  echo " - genisoimage (or mkisofs)"
+  echo " - genisoimage or mkisofs"
   echo ""
 
-  if [[ "$(uname)" == "Linux" ]]; then
+  if [ `uname` == "Linux" ]; then
     # Linux
     echo "If you use Debian or Ubuntu you can install these using:"
     echo "sudo apt-get install cabextract wimtools chntpw genisoimage"
-  elif [[ "$(uname)" == "Darwin" ]]; then
+  elif [ `uname` == "Darwin" ]; then
     # macOS
     echo "If you use Homebrew, you can install these using:"
     echo "brew tap sidneys/homebrew"
@@ -572,10 +572,10 @@ fi
 echo -e "$infoColor""Creating ISO image...""$resetColor"
 find ISODIR -exec touch {} +
 
-# Use mkisofs instead of genisoimage if it was not found
-$genisoimage=`which genisoimage >/dev/null 2>&`
-if [ -z $genisoimage ]; then
-  $genisoimage=`which mkisofs >/dev/null 2>&`
+# Use mkisofs as fallback to genisoimage
+genisoimage="$(command -v genisoimage)"
+if [ -z "$genisoimage" ]; then
+  genisoimage="$(command -v mkisofs)"
 fi
 
 "$genisoimage" -b "boot/etfsboot.com" --no-emul-boot \
