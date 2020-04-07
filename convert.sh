@@ -6,8 +6,10 @@ if [ -f `dirname $0`/convert_ve_plugin ]; then
   . `dirname $0`/convert_ve_plugin
 fi
 
-if [ -f `dirname $0`/convert_config_linux ]; then
+if [ -f `dirname $0`/convert_config_linux ] && [ `uname` == "Linux" ]; then
   . `dirname $0`/convert_config_linux
+elif [ -f `dirname $0`/convert_config_macos ] && [ `uname` == "Darwin" ]; then
+  . `dirname $0`/convert_config_macos
 else
   VIRTUAL_EDITIONS_LIST="CoreSingleLanguage Enterprise EnterpriseN Education \
   EducationN ProfessionalEducation ProfessionalEducationN \
@@ -266,7 +268,11 @@ if [ "$1" == "-?" -o "$1" == "--help" -o "$1" == "-h" ]; then
   echo "0 - do not create virtual editions (default)"
   echo "1 - create virtual edtitions"
   echo ""
+  if [ `uname` == "Linux" ]; then
   echo -e "${infoColor}convert_config_linux file${resetColor}"
+  elif [ `uname` == "Darwin" ]; then
+    echo -e "${infoColor}convert_config_macos file${resetColor}"
+  fi
   echo "This file can be used to configure some advanced options of this script."
   echo "It is required to place configuration in the same directory as script."
   echo ""
