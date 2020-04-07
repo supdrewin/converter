@@ -284,16 +284,27 @@ fi
 if ! which cabextract >/dev/null 2>&1 \
 || ! which wimlib-imagex >/dev/null 2>&1 \
 || ! which chntpw >/dev/null 2>&1 \
-|| ! which genisoimage >/dev/null 2>&1; then
+|| ! which genisoimage >/dev/null 2>&1 \
+&& ! which mkisofs >/dev/null 2>&1; then
   echo "One of required applications is not installed."
   echo "The following applications need to be installed to use this script:"
   echo " - cabextract"
   echo " - wimlib-imagex"
   echo " - chntpw"
-  echo " - genisoimage"
+  echo " - genisoimage (or mkisofs)"
   echo ""
+
+  if [[ "$(uname)" == "Linux" ]]; then
+    # Linux
   echo "If you use Debian or Ubuntu you can install these using:"
   echo "sudo apt-get install cabextract wimtools chntpw genisoimage"
+  elif [[ "$(uname)" == "Darwin" ]]; then
+    # macOS
+    echo "If you use Homebrew, you can install these using:"
+    echo "brew tap sidneys/homebrew"
+    echo "brew install cabextract wimlib cdrtools sidneys/homebrew/chntpw"
+  fi
+
   exit 1
 fi
 
