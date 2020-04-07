@@ -296,8 +296,8 @@ if ! which cabextract >/dev/null 2>&1 \
 
   if [[ "$(uname)" == "Linux" ]]; then
     # Linux
-  echo "If you use Debian or Ubuntu you can install these using:"
-  echo "sudo apt-get install cabextract wimtools chntpw genisoimage"
+    echo "If you use Debian or Ubuntu you can install these using:"
+    echo "sudo apt-get install cabextract wimtools chntpw genisoimage"
   elif [[ "$(uname)" == "Darwin" ]]; then
     # macOS
     echo "If you use Homebrew, you can install these using:"
@@ -566,7 +566,13 @@ fi
 echo -e "$infoColor""Creating ISO image...""$resetColor"
 find ISODIR -exec touch {} +
 
-genisoimage -b "boot/etfsboot.com" --no-emul-boot \
+# Use mkisofs instead of genisoimage if it was not found
+$genisoimage=`which genisoimage >/dev/null 2>&`
+if [ -z $genisoimage ]; then
+  $genisoimage=`which mkisofs >/dev/null 2>&`
+fi
+
+"$genisoimage" -b "boot/etfsboot.com" --no-emul-boot \
   --eltorito-alt-boot -b "efi/microsoft/boot/efisys.bin" --no-emul-boot \
   --udf --hide "*" -V "$isoLabel" -o "$isoName" ISODIR
 
