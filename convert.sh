@@ -374,7 +374,7 @@ fi
 
 list=
 
-lang=$(grep -i "_..-.*.esd" <<< "$metadataFiles" | head -1 | sed 's/.*_//g;s/.esd//gi')
+lang=$(grep -i "_..-.*.esd" <<< "$metadataFiles" | head -1 | tr '[:upper:]' '[:lower:]' | sed 's/.*_//g;s/.esd//g')
 metadataFiles=$(grep -i "$lang" <<< "$metadataFiles" | sort | uniq)
 firstMetadata=$(head -1 <<< "$metadataFiles")
 
