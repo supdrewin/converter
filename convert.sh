@@ -1,5 +1,5 @@
 #!/bin/bash
-scriptName="UUP Converter v0.5.5"
+scriptName="UUP Converter v0.6.0"
 UUP_CONVERTER_SCRIPT=1
 
 if [ -f `dirname $0`/convert_ve_plugin ]; then
@@ -239,18 +239,6 @@ sources/..-.*/wdsimage.dll.mui
 sources/..-.*/wimprovider.dll.mui
 sources/..-.*/WinDlp.dll.mui
 sources/..-.*/winsetup.dll.mui'
-
-bcdPatch='cd \Objects\{7619dcc9-fafe-11d9-b411-000476eba25f}\Elements
-nk 250000c2
-cd 250000c2
-nv 3 Element
-ed Element
-8
-:00000  00 00 00 00 00 00 00 00
-s
-q
-y
-'
 
 infoColor="\033[1;94m"
 errorColor="\033[1;91m"
@@ -564,8 +552,10 @@ wimlib-imagex optimize ISODIR/sources/install.$type
 echo ""
 
 if [ $build -ge 18890 ]; then
-  chntpw -e ISODIR/boot/bcd <<< "$bcdPatch" >/dev/null
-  chntpw -e ISODIR/efi/microsoft/boot/bcd <<< "$bcdPatch" >/dev/null
+  wimlib-imagex extract "$firstMetadata" 3 "/Windows/Boot/Fonts" \
+    --no-acls --dest-dir="ISODIR/boot" >/dev/null
+  mv -f ISODIR/boot/Fonts/* ISODIR/boot/fonts
+  rm -r ISODIR/boot/Fonts
 fi
 
 echo -e "$infoColor""Creating ISO image...""$resetColor"
