@@ -2,7 +2,7 @@ UUP converter
 -------------
 
 ### Description
-A basic UUP converter aimed for Linux users who don't have access to any
+A basic UUP converter aimed at Linux and macOS users who don't have access to any
 Windows machine, but want or need to create an ISO image for latest Windows
 Insider version downloaded from UUP dump.
 
@@ -50,7 +50,7 @@ option.
 
 ### Configuration file
 Configuration of advanced script options can be modified using
-convert_config_linux file.
+the file `convert_config_linux` (on Linux) or `convert_config_macos` (on macOS).
 
 ###### Configuration options
 ```
@@ -66,14 +66,25 @@ This script uses the following commands to do its work:
  * cabextract - to extract cabs
  * wimlib-imagex - to export files from metadata ESD
  * chntpw - to modify registry of first index of boot.wim
- * genisoimage - to create ISO image
+ * genisoimage or mkisofs - to create ISO image
 
+###### Linux
 If you use Debian or Ubuntu based distribution you can quickly install these
 using the following command:
 
-```
+```bash
 sudo apt-get install cabextract wimtools chntpw genisoimage
 ```
 
 If you use any other distribution, then you will need to check its repository
 for packages needed to run this script.
+
+###### macOS
+macOS requires [Homebrew](https://brew.sh) to install the prerequisite software.
+After Homebrew was installed, you can install the requirements using:
+
+```bash
+brew tap sidneys/homebrew
+brew install cabextract wimlib cdrtools sidneys/homebrew/chntpw
+```
+

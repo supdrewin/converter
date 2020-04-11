@@ -6,8 +6,10 @@ if [ -f `dirname $0`/convert_ve_plugin ]; then
   . `dirname $0`/convert_ve_plugin
 fi
 
-if [ -f `dirname $0`/convert_config_linux ]; then
+if [ -f `dirname $0`/convert_config_linux ] && [ `uname` == "Linux" ]; then
   . `dirname $0`/convert_config_linux
+elif [ -f `dirname $0`/convert_config_macos ] && [ `uname` == "Darwin" ]; then
+  . `dirname $0`/convert_config_macos
 else
   VIRTUAL_EDITIONS_LIST="CoreSingleLanguage Enterprise EnterpriseN Education \
   EducationN ProfessionalEducation ProfessionalEducationN \
@@ -266,7 +268,11 @@ if [ "$1" == "-?" -o "$1" == "--help" -o "$1" == "-h" ]; then
   echo "0 - do not create virtual editions (default)"
   echo "1 - create virtual edtitions"
   echo ""
-  echo -e "${infoColor}convert_config_linux file${resetColor}"
+  if [ `uname` == "Linux" ]; then
+    echo -e "${infoColor}convert_config_linux file${resetColor}"
+  elif [ `uname` == "Darwin" ]; then
+    echo -e "${infoColor}convert_config_macos file${resetColor}"
+  fi
   echo "This file can be used to configure some advanced options of this script."
   echo "It is required to place configuration in the same directory as script."
   echo ""
@@ -284,16 +290,26 @@ fi
 if ! which cabextract >/dev/null 2>&1 \
 || ! which wimlib-imagex >/dev/null 2>&1 \
 || ! which chntpw >/dev/null 2>&1 \
-|| ! which genisoimage >/dev/null 2>&1; then
+|| ! which genisoimage >/dev/null 2>&1 \
+&& ! which mkisofs >/dev/null 2>&1; then
   echo "One of required applications is not installed."
   echo "The following applications need to be installed to use this script:"
   echo " - cabextract"
   echo " - wimlib-imagex"
   echo " - chntpw"
-  echo " - genisoimage"
+  echo " - genisoimage or mkisofs"
   echo ""
-  echo "If you use Debian or Ubuntu you can install these using:"
-  echo "sudo apt-get install cabextract wimtools chntpw genisoimage"
+  if [ `uname` == "Linux" ]; then
+    # Linux
+    echo "If you use Debian or Ubuntu you can install these using:"
+    echo "sudo apt-get install cabextract wimtools chntpw genisoimage"
+  elif [ `uname` == "Darwin" ]; then
+    # macOS
+    echo "macOS requires Homebrew (https://brew.sh) to install the prerequisite software."
+    echo "If you use Homebrew, you can install these using:"
+    echo "brew tap sidneys/homebrew"
+    echo "brew install cabextract wimlib cdrtools sidneys/homebrew/chntpw"
+  fi
   exit 1
 fi
 
@@ -363,7 +379,7 @@ fi
 
 list=
 
-lang=$(grep -i "_..-.*.esd" <<< "$metadataFiles" | head -1 | sed 's/.*_//g;s/.esd//gi')
+lang=$(grep -i "_..-.*.esd" <<< "$metadataFiles" | head -1 | tr '[:upper:]' '[:lower:]' | sed 's/.*_//g;s/.esd//g')
 metadataFiles=$(grep -i "$lang" <<< "$metadataFiles" | sort | uniq)
 firstMetadata=$(head -1 <<< "$metadataFiles")
 
@@ -555,7 +571,13 @@ fi
 echo -e "$infoColor""Creating ISO image...""$resetColor"
 find ISODIR -exec touch {} +
 
-genisoimage -b "boot/etfsboot.com" --no-emul-boot \
+# Use mkisofs as fallback to genisoimage
+genisoimage="$(command -v genisoimage)"
+if [ -z "$genisoimage" ]; then
+  genisoimage="$(command -v mkisofs)"
+fi
+
+"$genisoimage" -b "boot/etfsboot.com" --no-emul-boot \
   --eltorito-alt-boot -b "efi/microsoft/boot/efisys.bin" --no-emul-boot \
   --udf --hide "*" -V "$isoLabel" -o "$isoName" ISODIR
 
