@@ -6,8 +6,8 @@ A basic UUP converter aimed at Linux and macOS users who don't have access to an
 Windows machine, but want or need to create an ISO image for latest Windows
 Insider version downloaded from UUP dump.
 
-For obvious reasons this script will never support integration of Cumulative
-Updates to created images.
+**For obvious reasons this script will never support integration of Cumulative
+Updates to created images.**
 
 ### Usage
 ```
