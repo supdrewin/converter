@@ -2,6 +2,8 @@
 scriptName="UUP Converter v0.6.3"
 UUP_CONVERTER_SCRIPT=1
 
+export PATH=${PATH}:/usr/sbin
+
 if [ -f `dirname $0`/convert_ve_plugin ]; then
   . `dirname $0`/convert_ve_plugin
 fi
