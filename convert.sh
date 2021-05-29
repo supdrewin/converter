@@ -399,7 +399,7 @@ for file in `find "$uupDir" -type f -iname "windows10.0-kb*.cab"`; do
 done
 
 if [ $updatesDetected == true ]; then
-  echo -e "\033[33mNote: This script does now allow the integration of updates.\nUse the Windows version of the converter to integrate updates."
+  echo -e "\033[33mNote: This script does not allow the integration of updates.\nUse the Windows version of the converter to integrate updates."
 fi
 
 if [ $runVirtualEditions -eq 1 ] && [ "$VIRTUAL_EDITIONS_PLUGIN_LOADED" != "1" ]; then
