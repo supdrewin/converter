@@ -76,6 +76,11 @@ using the following command:
 sudo apt-get install cabextract wimtools chntpw genisoimage
 ```
 
+If you use Arch Linux you can also install these using the following command:
+```bash
+sudo pacman -S cabextract wimlib chntpw cdrtools
+```
+
 If you use any other distribution, then you will need to check its repository
 for packages needed to run this script.
 
