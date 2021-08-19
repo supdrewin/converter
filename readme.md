@@ -10,7 +10,7 @@ Insider version downloaded from UUP dump.
 Updates to created images.**
 
 ### Usage
-```
+``` shell
 ./convert.sh [compression] [uups_directory] [create_virtual_editions]
 ```
 
@@ -72,9 +72,15 @@ This script uses the following commands to do its work:
 If you use Debian or Ubuntu based distribution you can quickly install these
 using the following command:
 
-```bash
-sudo apt-get install cabextract wimtools chntpw genisoimage
+``` shell
+sudo apt install cabextract wimtools chntpw genisoimage
 ```
+
+For Arch Linux, requested dependencies can be installed by following command:
+
+``` shell
+sudo pacman -Sy --needed wimlib cabextract cdrtools chntpw
+``` 
 
 If you use any other distribution, then you will need to check its repository
 for packages needed to run this script.
@@ -83,8 +89,7 @@ for packages needed to run this script.
 macOS requires [Homebrew](https://brew.sh) to install the prerequisite software.
 After Homebrew was installed, you can install the requirements using:
 
-```bash
+``` shell
 brew tap sidneys/homebrew
 brew install cabextract wimlib cdrtools sidneys/homebrew/chntpw
 ```
-

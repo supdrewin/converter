@@ -307,7 +307,10 @@ if ! which cabextract >/dev/null 2>&1 \
   if [ `uname` == "Linux" ]; then
     # Linux
     echo "If you use Debian or Ubuntu you can install these using:"
-    echo "sudo apt-get install cabextract wimtools chntpw genisoimage"
+    echo "sudo apt install cabextract wimtools chntpw genisoimage"
+    echo ""
+    echo "If you use Arch Linux you can install these using:"
+    echo "sudo pacman -Sy --needed wimlib cabextract cdrtools chntpw"
   elif [ `uname` == "Darwin" ]; then
     # macOS
     echo "macOS requires Homebrew (https://brew.sh) to install the prerequisite software."
